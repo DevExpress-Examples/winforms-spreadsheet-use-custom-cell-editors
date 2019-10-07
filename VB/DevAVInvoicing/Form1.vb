@@ -147,7 +147,7 @@ Namespace DevAVInvoicing
             storesTable.AutoFilter.Clear()
             storesTable.AutoFilter.Columns(1).ApplyFilterCriteria(customerId)
             ' Select the default store and assign it to the cell G12 on the "Invoice" worksheet.
-            Dim range As Range = storesTable.DataRange
+            Dim range As CellRange = storesTable.DataRange
             For rowOffset As Integer = 0 To range.RowCount - 1
                 If range(rowOffset, 1).Value.TextValue = customerId Then
                     invoice("G12").Value = range(rowOffset, 3).Value.TextValue
@@ -189,8 +189,8 @@ Namespace DevAVInvoicing
                 Dim rowIndex As Integer = invoiceItems.Range.BottomRowIndex
                 sheet.Rows.Insert(rowIndex)
                 sheet.Rows(rowIndex).Height = sheet.Rows(rowIndex + 1).Height
-                Dim range As Range = invoiceItems.Range
-                Dim itemRange As Range = sheet.Range.FromLTRB(range.LeftColumnIndex, range.BottomRowIndex, range.RightColumnIndex, range.BottomRowIndex)
+                Dim range As CellRange = invoiceItems.Range
+                Dim itemRange As CellRange = sheet.Range.FromLTRB(range.LeftColumnIndex, range.BottomRowIndex, range.RightColumnIndex, range.BottomRowIndex)
                 MoveUpLastRecord(itemRange)
                 InitializeRecord(itemRange)
                 spreadsheetControl1.SelectedCell = itemRange(1)
@@ -200,13 +200,13 @@ Namespace DevAVInvoicing
         End Sub
 
         ' Move the last record one row up.
-        Private Sub MoveUpLastRecord(ByVal itemRange As Range)
-            Dim range As Range = itemRange.Offset(-1, 0)
+        Private Sub MoveUpLastRecord(ByVal itemRange As CellRange)
+            Dim range As CellRange = itemRange.Offset(-1, 0)
             range.CopyFrom(itemRange, PasteSpecial.All, True)
         End Sub
 
         ' Specify the default values for a new record. 
-        Private Sub InitializeRecord(ByVal itemRange As Range)
+        Private Sub InitializeRecord(ByVal itemRange As CellRange)
             itemRange(0).Value = 1 ' Quantity
             itemRange(1).Value = CellValue.Empty ' Product Description
             itemRange(7).Value = 0 ' Discount

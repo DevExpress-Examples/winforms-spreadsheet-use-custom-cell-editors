@@ -143,7 +143,7 @@ namespace DevAVInvoicing
             storesTable.AutoFilter.Clear();
             storesTable.AutoFilter.Columns[1].ApplyFilterCriteria(customerId);
             // Select the default store and assign it to the cell G12 on the "Invoice" worksheet.
-            Range range = storesTable.DataRange;
+            CellRange range = storesTable.DataRange;
             for (int rowOffset = 0; rowOffset < range.RowCount; rowOffset++) {
                 if (range[rowOffset, 1].Value.TextValue == customerId) {
                     invoice["G12"].Value = range[rowOffset, 3].Value.TextValue;
@@ -183,8 +183,8 @@ namespace DevAVInvoicing
                 int rowIndex = invoiceItems.Range.BottomRowIndex;
                 sheet.Rows.Insert(rowIndex);
                 sheet.Rows[rowIndex].Height = sheet.Rows[rowIndex + 1].Height;
-                Range range = invoiceItems.Range;
-                Range itemRange = sheet.Range.FromLTRB(range.LeftColumnIndex, range.BottomRowIndex, range.RightColumnIndex, range.BottomRowIndex);
+                CellRange range = invoiceItems.Range;
+                CellRange itemRange = sheet.Range.FromLTRB(range.LeftColumnIndex, range.BottomRowIndex, range.RightColumnIndex, range.BottomRowIndex);
                 MoveUpLastRecord(itemRange);
                 InitializeRecord(itemRange);
                 spreadsheetControl1.SelectedCell = itemRange[1];
@@ -195,13 +195,13 @@ namespace DevAVInvoicing
         }
 
         // Move the last record one row up.
-        void MoveUpLastRecord(Range itemRange) {
-            Range range = itemRange.Offset(-1, 0);
+        void MoveUpLastRecord(CellRange itemRange) {
+            CellRange range = itemRange.Offset(-1, 0);
             range.CopyFrom(itemRange, PasteSpecial.All, true);
         }
 
         // Specify the default values for a new record. 
-        void InitializeRecord(Range itemRange) {
+        void InitializeRecord(CellRange itemRange) {
             itemRange[0].Value = 1; // Quantity
             itemRange[1].Value = CellValue.Empty; // Product Description
             itemRange[7].Value = 0; // Discount
